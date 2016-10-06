@@ -1,0 +1,11 @@
+IP/*
+Nodes/*
+Prefix/*
+logs/*
+traceroutes/*
+ASes
+*.class
+*.pyc
+planet_lab
+planet_lab_nodes.txt
+planet_lab_nodes_final
