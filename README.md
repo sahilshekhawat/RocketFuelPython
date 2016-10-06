@@ -1,15 +1,32 @@
-Before Running Traceroutes
-==========================
+A Python implementation of RocketFuel topology engine.
+Copyright (C) 2016 Sahil Shekhawat <sahilshekhawat01@gmail.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+#### Before Running Traceroutes
+
 1. Getting Prefixes in AS: Run "prefix.py" to get all prefixes of ASes.
 2. Getting IPs from Prefixes: Run "ip_from_prefix.py" to get all IPs from advertised prefixes.
 
-Running
-=======
+#### Running
+
 3. Run "run.sh" to run Traceroute.java to get traceroutes from planet lab nodes.
 
 
-After Running
-=============
+#### After Running
+
 1. Combine all traceroute results into one file named "<AS>_ALL"
 Code:
 ```
@@ -44,3 +61,4 @@ done
 7-8-9. Run "process.py"
 
 result is in "output" file
+
