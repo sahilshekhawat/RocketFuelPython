@@ -14,6 +14,29 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+### Installation
+
+```
+cd ./RocketFuel
+python setup.py install
+```
+
+### Usage:
+
+1. To start traceroute to an AS.
+```
+rocketfuel start <AS number>
+```
+
+2. To analyse the traceroute results
+```
+rocketfuel analyse <AS number>
+```
+
+3. Check licese
+```
+rocketfuel license
+```
 
 #### Before Running Traceroutes
 
