@@ -27,13 +27,7 @@ import requests
 import ipaddress as ip
 from bs4 import BeautifulSoup
 
-def _create_file(filename):
-	if not os.path.exists(os.path.dirname(filename)):
-	    try:
-	        os.makedirs(os.path.dirname(filename))
-	    except OSError as exc: # Guard against race condition
-	        if exc.errno != errno.EEXIST:
-	            raise
+from utils import create_file
 
 def prefix(asn):
 	# ASes = []
@@ -51,7 +45,7 @@ def prefix(asn):
 	sys.stdout.flush()
 	
 	filename = "Prefix/" + ASN
-	_create_file(filename)
+	create_file(filename)
 	output = open(filename, "w")
 
 	page = requests.get(url_base+ASN)
@@ -75,7 +69,7 @@ def ip_from_prefix(asn):
 	sys.stdout.flush()
 
 	filename = "IP/" + ASN
-	_create_file(filename)
+	create_file(filename)
 	output_file = open(os.getcwd() + "/" + filename, 'a')
 	input_file = open(os.getcwd() + "/Prefix/AS" + asn, 'r')
 	for line in input_file.readlines():

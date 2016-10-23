@@ -69,16 +69,28 @@ def analyse(as_number):
 
 @cli.command()
 @click.argument('AS_number')
-def start(as_number):
+@click.option('--key', prompt='private key file path',
+	help="private key to ssh into planet lab nodes. \n\
+	Visit https://www.planet-lab.org/ to get your private key")
+@click.option('--user', prompt='username for login',
+	help="username for planet lab nodes account.")
+def start(as_number, key, user):
 	"""start traceroutes to ASes from Planet Lab nodes."""
 	# remove AS from the AS number if exists
 	asn = as_number
 	if asn[:2].upper() == "AS":
 		asn = asn[2:]
 
-	#Get all advertised prefixes for the AS.
-	find.prefix(asn)
-	#Randomly get some ips from each advertised prefixes.
-	find.ip_from_prefix(asn)
-	#Finally, run the traceroute
-	run.traceroute()
+	if key is None:
+		print "Private key is required to ssh into Planet lab nodes.\n\
+		type 'rocketfuel start --help' for more info"
+	if user is None:
+		print "Username is required to ssh into Planet lab nodes.\n\
+		type 'rocketfuel start --help' for more info"
+	else:
+		#Get all advertised prefixes for the AS.
+		#find.prefix(asn)
+		#Randomly get some ips from each advertised prefixes.
+		#find.ip_from_prefix(asn)
+		#Finally, run the traceroute
+		run.traceroute(asn, key, user)

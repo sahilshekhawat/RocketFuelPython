@@ -32,9 +32,10 @@ setup(
     install_requires=[
         'bs4',
         'click',
-        'daemon',
+        'paramiko',
         'requests',
-        'ipaddress'
+        'ipaddress',
+        'python-daemon'
     ],
     entry_points='''
         [console_scripts]

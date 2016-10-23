@@ -15,17 +15,24 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ### Installation
-
 ```
-cd ./RocketFuel
+cd ./RocketFuelPython
 python setup.py install
 ```
 
-### Usage:
-
-1. To start traceroute to an AS.
+### Dependencies
+**Ubuntu**
+While python dependencies are handled by setuptools, some packages are required by the
+dependencies which fails to compile otherwise.
 ```
-rocketfuel start <AS number>
+sudo apt-get install build-essential libssl-dev libffi-dev python-dev
+```
+
+### Usage:
+1. To start traceroute to an AS. A private key is required to ssh into planet lab nodes.
+
+```
+rocketfuel start <as-number> --key <private-key> --user <username>
 ```
 
 2. To analyse the traceroute results
