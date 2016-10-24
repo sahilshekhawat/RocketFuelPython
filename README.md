@@ -15,10 +15,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 **Its still a work in progress, I am updating it daily and soon will make a release. Until then, please bear with me :)**
-
+	
 ### About
 
 **How it works**
+
 1. It gets the advertised prefixes for an AS from [http://ipinfo.io/](http://ipinfo.io/)
 2. Randomly get some ip addresses from each advertised prefixes.
 3. ssh into each of the given host and run traceroute to those ip addresses in the background.
@@ -27,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 7. Finds the ip which belongs to the AS and calculate number of **Edge and Core routers**.
 
 **Requirements**
+
 1. **Nodes** directory: This directory must contain all the hosts from which you want to run traceroute. I recommend using [**Planet Lab**](https://www.planet-lab.org)
 2. **Private Key**: A private key to ssh into those hosts.
 3. **Username**: Username of the account on the hosts.
@@ -38,7 +40,7 @@ python setup.py install
 ```
 
 ### Usage:
-1. To start traceroute to an AS. A private key is required to ssh into hosts which will run the traceroute.
+To start traceroute to an AS. A private key is required to ssh into hosts which will run the traceroute.
 (You don't want to run traceroute from you own machine, or do you? ;)
 
 ```
@@ -49,12 +51,12 @@ You can check the status of the background processes by running
 rocketfuel status
 ```
 
-2. To analyse the traceroute results
+To analyse the traceroute results
 ```
 rocketfuel analyse <AS number>
 ```
 
-3. Check licese
+Check licese
 ```
 rocketfuel license
 ```
