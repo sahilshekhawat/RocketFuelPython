@@ -32,18 +32,18 @@ client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 def traceroute(asn, key, user):
 	directory = "Traceroutes"
 	key = paramiko.RSAKey.from_private_key_file(key)
-	#sys.stdout.write("Trying to connecting...")
 	create_file(directory + "/")
 	ips = _get_ips(asn)
 	nodes = _planet_lab_nodes()
 	#ips = ["google.com", "fb.com"]
 	#nodes = ["planetlab01.cs.washington.edu"]
-	# try:
-	for node in nodes:
-		with daemon.DaemonContext(working_directory=os.getcwd()):
-			_run(asn, key, user, node, ips)
-	# except Exception:
-	# 	sys.stdout.write("ERROR! skipping\n")
+	sys.stdout.write("Running traceroute commands as a daemon... Bye, until I have all those results ;)")
+	try:
+		for node in nodes:
+			with daemon.DaemonContext(working_directory=os.getcwd()):
+				_run(asn, key, user, node, ips)
+	except Exception:
+		sys.stdout.write("ERROR! skipping\n")
 
 def _run(asn, key, user, node, ips):
 	output = open("Traceroutes/" + asn + "#" + node, 'w+')

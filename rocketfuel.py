@@ -89,8 +89,8 @@ def start(as_number, key, user):
 		type 'rocketfuel start --help' for more info"
 	else:
 		#Get all advertised prefixes for the AS.
-		#find.prefix(asn)
+		find.prefix(asn)
 		#Randomly get some ips from each advertised prefixes.
-		#find.ip_from_prefix(asn)
+		find.ip_from_prefix(asn)
 		#Finally, run the traceroute
 		run.traceroute(asn, key, user)
