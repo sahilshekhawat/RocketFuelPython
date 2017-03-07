@@ -14,3 +14,7 @@ rocketfuel.egg-info
 
 planetLab_privateKey
 Traceroutes/*
+build/
+dist/
+Nodes/
+

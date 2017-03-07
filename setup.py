@@ -37,8 +37,9 @@ setup(
         'ipaddress',
         'python-daemon'
     ],
+    packages=['rocketfuel'],
     entry_points='''
         [console_scripts]
-        rocketfuel=rocketfuel:cli
+        rocketfuel=rocketfuel.rocketfuel:cli
     ''',
 )
