@@ -9,7 +9,6 @@ planet_lab
 planet_lab_nodes.txt
 planet_lab_nodes_final
  
-rocketfuel/*
 rocketfuel.egg-info
 
 planetLab_privateKey
