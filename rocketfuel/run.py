@@ -20,66 +20,27 @@ Type ``rocketfuel license`` to see this message.
 
 import os
 import sys
-import daemon
 import paramiko
 import base64
+import subprocess
 
 from utils import create_file
 
-client = paramiko.SSHClient()
-client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+#======= DO NOT CHANGE ==========
+NODES_DIR = "Nodes" # Directory containing nodes
+MAX_PROCESSES = 50  # No. of processes you want to run.
+#================================
 
-def traceroute(asn, key, user):
-	directory = "Traceroutes"
-	key = paramiko.RSAKey.from_private_key_file(key)
-	create_file(directory + "/")
-	ips = _get_ips(asn)
-	nodes = _planet_lab_nodes()
-	#ips = ["google.com", "fb.com"]
-	#nodes = ["planetlab01.cs.washington.edu"]
-	sys.stdout.write("Running traceroute commands as a daemon... Bye, until I have all those results ;)")
-	try:
-		for node in nodes:
-			with daemon.DaemonContext(working_directory=os.getcwd()):
-				_run(asn, key, user, node, ips)
-	except Exception:
-		sys.stdout.write("ERROR! skipping\n")
+def traceroute(asn, key, slicename):
+	print "Running traceroute commands as a daemon...^_^"
+	f = open("pid_file", 'w+')
+	for i in xrange(MAX_PROCESSES):
+		p = subprocess.Popen(["python", "./rocketfuel/traceroute.py", asn, key, slicename, str(i)], shell=False)
+		f.write(str(p.pid))
+		f.write("\n")
 
-def _run(asn, key, user, node, ips):
-	output = open("Traceroutes/" + asn + "#" + node, 'w+')
-	#sys.stdout.write("Done!\n")
-	#for host in node:
-	client.connect(hostname=node, username=user, pkey = key)
-	for ip in ips:
-		stdin, stdout, stderr = client.exec_command("sudo traceroute " + ip + ";")
-		output.write(stdout.read())
-	client.close()
-
-def _get_ips(asn):
-	ips = list()
-	filename = "IP/AS" + asn
-	if not os.path.exists(filename):
-	    sys.stdout.write("[" + ASN +"] " + "IPs not found, make sure IP addresses are in ./IP/AS" + asn + "\n")
-	else:
-		f = open(filename, 'r')
-		for line in f.readlines():
-			line = line.rstrip('\n')
-			ips.append(line)
-		f.close()
-	return ips
-
-def _planet_lab_nodes():
-	nodes = []
-	directory = "Nodes"
-	if not os.path.exists(directory):
-		sys.stdout.write("[" + ASN +"] " + "Planet lab nodes not found, make sure nodes are in Nodes directory\n")
-	else:
-		for filename in os.listdir(directory):
-			f = open(directory + "/" +filename, 'r')
-			for line in f.readlines():
-				line = line.rstrip('\n')
-				nodes.append(line)
-	return nodes
+	print "Bye, until I have all those results ;)"
+	sys.exit(0)
 
 def planet_lab_auth(api_server, auth):
 	sys.stdout.write("Verifying planet lab account info...\n")

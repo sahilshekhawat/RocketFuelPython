@@ -30,8 +30,11 @@ import run
 # from find_traceroute_path import find_traceroute_path
 # from run_traceroute import run_traceroute
 
+#======= DO NOT CHANGE ==========
 NODES_DIR = "Nodes" # Directory containing nodes
 MAX_PROCESSES = 50  # No. of processes you want to run.
+#================================
+
 
 @click.group()
 def cli():
@@ -92,37 +95,37 @@ def start(ases, username, password, key, slicename):
 		print "No slice name passed"
 
 	# getting nodes
-	auth = dict()
-	auth['Username'] = username
-	auth['AuthString'] = password
-	auth['AuthMethod'] = "password"
+	# auth = dict()
+	# auth['Username'] = username
+	# auth['AuthString'] = password
+	# auth['AuthMethod'] = "password"
 
-	try:
-		api_server = ServerProxy('https://www.planet-lab.org/PLCAPI/')
-		if run.planet_lab_auth(api_server, auth):
-			node_list = find.user_slice(api_server, auth, slicename)
+	# try:
+	# 	api_server = ServerProxy('https://www.planet-lab.org/PLCAPI/')
+	# 	if run.planet_lab_auth(api_server, auth):
+	# 		node_list = find.user_slice(api_server, auth, slicename)
 
-			if not os.path.exists(NODES_DIR):
-				os.mkdir(NODES_DIR)
+	# 		if not os.path.exists(NODES_DIR):
+	# 			os.mkdir(NODES_DIR)
 
-			# Separating nodes into 50 parts which will run concurrently
-			node_index = 0
-			node_limit = len(node_list)/MAX_PROCESSES
-			for i in xrange(0, MAX_PROCESSES):
-				fnodes = open(NODES_DIR + "/nodes_" + str(i), 'w')
-				nodes_added = 0
-				while nodes_added < node_limit:
-					fnodes.write(node_list[node_index] + "\n")
-					node_index += 1
-					nodes_added += 1
-				fnodes.close()
+	# 		# Separating nodes into 50 parts which will run concurrently
+	# 		node_index = 0
+	# 		node_limit = len(node_list)/MAX_PROCESSES
+	# 		for i in xrange(0, MAX_PROCESSES):
+	# 			fnodes = open(NODES_DIR + "/nodes_" + str(i), 'w')
+	# 			nodes_added = 0
+	# 			while nodes_added < node_limit:
+	# 				fnodes.write(node_list[node_index] + "\n")
+	# 				node_index += 1
+	# 				nodes_added += 1
+	# 			fnodes.close()
 
-		else:
-			sys.exit()
-	except KeyboardInterrupt:
-		sys.exit()
-	except:
-		raise
+	# 	else:
+	# 		sys.exit()
+	# except KeyboardInterrupt:
+	# 	sys.exit()
+	# except:
+	# 	raise
 
 	"""start traceroutes to ASes from Planet Lab nodes."""
 	# remove AS from the AS number if exists
@@ -136,8 +139,8 @@ def start(ases, username, password, key, slicename):
 			asn = asn[2:]
 
 		#Get all advertised prefixes for the AS.
-		find.prefix(asn)
+		#find.prefix(asn)
 		#Randomly get some ips from each advertised prefixes.
-		find.ip_from_prefix(asn)
+		#find.ip_from_prefix(asn)
 		#Finally, run the traceroute
 		run.traceroute(asn, key, slicename)

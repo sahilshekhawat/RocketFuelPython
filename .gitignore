@@ -17,3 +17,5 @@ build/
 dist/
 Nodes/
 
+pid_file
+rocketfuel.log

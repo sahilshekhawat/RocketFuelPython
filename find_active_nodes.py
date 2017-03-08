@@ -3,10 +3,10 @@ import socket
 from paramiko import *
 
 # Change following variables =========
-USERNAME = "iiitd_anshika"				# Planet lab slice name
-KEY_FILENAME = "planetLab_privateKey"	# Key name
-NODES = "NODES"							# File which contains all nodes
-NODES_ACTIVE = "NODES_ACTIVE"			# Output file
+USERNAME = ""						# Planet lab slice name
+KEY_FILENAME = ""					# Key name
+NODES = ""							# File which contains all nodes
+NODES_ACTIVE = ""					# Output file
 # ====================================
 
 
