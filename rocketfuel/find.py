@@ -248,7 +248,8 @@ def edge_routers(asn):
 				if i - 1 >= 0:
 					found_previous_edge = False
 					node = line[i-1].rstrip()
-					edge_routers.add(node)
+					if node in ip_list:
+						edge_routers.add(node)
 
 	for ip in edge_routers:
 		output_file.write(ip + "\n")
@@ -256,3 +257,30 @@ def edge_routers(asn):
 	ip_file.close()
 	path_file.close()
 	output_file.close()
+
+def core_routers(asn):
+	# ensure that edge_routers are already calculated.
+	all_ips = open("Traceroutes/" + asn + "_IPs", 'r')
+	edge_ips = open("Traceroutes/" + asn + "_edge_routers", 'r')
+	core_ips = open("Traceroutes/" + asn + "_core_routers", 'w')
+
+	all_ips_list = Set()
+	for line in all_ips.readlines():
+	    all_ips_list.add(line)
+
+
+	edge_ips_list = Set()
+	for line in edge_ips.readlines():
+	    edge_ips_list.add(line)
+
+	core_ips_list = Set()
+	for ip in all_ips_list:
+	    if ip not in edge_ips_list:
+	        core_ips_list.add(ip)
+
+	for ip in core_ips_list:
+	    core_ips.write(ip)
+
+	all_ips.close()
+	edge_ips.close()
+	core_ips.close()
