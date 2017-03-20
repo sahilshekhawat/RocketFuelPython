@@ -24,6 +24,7 @@ import os
 import sys
 import random
 import requests
+import subprocess
 import ipaddress as ip
 from bs4 import BeautifulSoup
 
@@ -124,6 +125,7 @@ def user_slice(api_server, auth, slice_name):
         return node_list
 
 def traceroute_path(asn):
+	print "Extracting ip paths from raw traceroute results..."
 	input_file = open("Traceroutes/" + asn + "_ALL", 'r')
 	output_file = open("Traceroutes/" + asn + "_path", 'w')
 	regex_pattern = re.compile("\((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\)")
@@ -163,3 +165,59 @@ def traceroute_path(asn):
 			line = input_file.readline()
 			# output_file.write(path)
 			# output_file.write("\n")
+
+def unique_ips(asn):
+	print "Finding unique IP addresses from IP paths..."
+	input_file = open("Traceroutes/" + asn + "_path", 'r')
+	output_file = open("Traceroutes/" + asn + "_unique_IPs", 'w')
+
+	uips_dict = list()
+	for line in input_file.readlines():
+		line = line.rstrip()
+		tmp = line.split(" ")
+		for ip in tmp:
+			ip = ip.rstrip()
+			if ip not in uips_dict:
+				uips_dict.append(ip)
+
+
+	for ip in uips_dict:
+		output_file.write(ip + "\n")
+
+	input_file.close()
+	output_file.close()
+
+def ip_to_as_mapping(asn):
+	# netcat whois.cymru.com 43
+	input_file = open("Traceroutes/" + asn + "_unique_IPs", 'r')
+	output_file = open("Traceroutes/" + asn + "_ip_to_AS_results", 'w')
+
+	for line in input_file.readlines():
+		line = line.rstrip()
+		line += ".origin.asn.cymru.com"
+		output = subprocess.Popen(['whois', '-h' , 'whois.cymru.com', line], stdout=subprocess.PIPE).communicate()[0]
+		output_file.write(output)
+
+	output_file.close()
+	input_file.close()
+
+def ip_in_given_as(asn):
+
+	input_file = open("Traceroutes/" + asn + "_ip_to_AS_results", 'r')
+	output_file = open("Traceroutes/" + asn + "_IPs", 'w')
+
+	for line in input_file.readlines():
+		line = line.rstrip()
+		if line[:2] != "AS":
+			line = line.split("|")
+			if asn[:2] == "AS":
+				asn = asn[2:]
+
+			if line[0].rstrip() == asn:
+				output_file.write(line[1].rstrip() + "\n")
+
+	output_file.close()
+	input_file.close()
+
+def edge_routers(asn):
+	

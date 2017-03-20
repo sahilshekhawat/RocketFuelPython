@@ -74,7 +74,10 @@ def analyse(asn):
 	print "NOTE: MAKE SURE YOU HAVE ALREADY RUN 'rocketfuel start' OR HAVE TRACEROUTE RESULTS in 'Traceroutes' directory."
 
 	# run.combine_traceroute_results(asn)
-	find.traceroute_path(asn)
+	#find.traceroute_path(asn)
+	# find.unique_ips(asn)
+	# find.ip_to_as_mapping(asn)
+	find.ip_in_given_as(asn)
 	
 
 @cli.command()
