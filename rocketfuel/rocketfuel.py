@@ -77,7 +77,8 @@ def analyse(asn):
 	#find.traceroute_path(asn)
 	# find.unique_ips(asn)
 	# find.ip_to_as_mapping(asn)
-	find.ip_in_given_as(asn)
+	# find.ip_in_given_as(asn)
+	find.edge_routers(asn)
 	
 
 @cli.command()

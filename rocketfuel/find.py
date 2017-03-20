@@ -27,6 +27,7 @@ import requests
 import subprocess
 import ipaddress as ip
 from bs4 import BeautifulSoup
+from sets import Set
 
 from utils import create_file
 
@@ -220,4 +221,38 @@ def ip_in_given_as(asn):
 	input_file.close()
 
 def edge_routers(asn):
-	
+	ip_file = open("Traceroutes/" + asn + "_IPs", 'r')
+	path_file = open("Traceroutes/" + asn + "_path", 'r')
+	output_file = open("Traceroutes/" + asn + "_edge_routers", 'w')
+
+	ip_list = Set()
+	edge_routers = Set()
+	for line in ip_file.readlines():
+		line = line.rstrip()
+		ip_list.add(line)
+
+	for line in path_file.readlines():
+		line = line.rstrip()
+		line = line.split(" ")
+
+		found_previous_edge = False
+		for i in xrange(len(line)):
+			node = line[i]
+			node = node.rstrip()
+			if node in ip_list:  # nodes belonging to particular given AS
+				if not found_previous_edge:
+					found_previous_edge = True
+					edge_routers.add(node)
+
+			elif found_previous_edge:
+				if i - 1 >= 0:
+					found_previous_edge = False
+					node = line[i-1].rstrip()
+					edge_routers.add(node)
+
+	for ip in edge_routers:
+		output_file.write(ip + "\n")
+
+	ip_file.close()
+	path_file.close()
+	output_file.close()
