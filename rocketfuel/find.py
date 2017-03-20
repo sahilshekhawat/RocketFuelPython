@@ -23,6 +23,7 @@ import re
 import os
 import sys
 import random
+import operator
 import requests
 import subprocess
 import ipaddress as ip
@@ -288,27 +289,27 @@ def core_routers(asn):
 	core_ips.close()
 
 def frequency(asn):
-	traceroute_path = open("Traceroutes/" + asn + "_path", 'r')
-	edge_ips = open("Traceroutes/" + asn + "_edge_routers", 'r')
-	core_ips = open("Traceroutes/" + asn + "_core_routers", 'r')
-	all_ips = open("Traceroutes/" + asn + "_IPs", 'r')
+	traceroute_path_f = open("Traceroutes/" + asn + "_path", 'r')
+	edge_ips_f = open("Traceroutes/" + asn + "_edge_routers", 'r')
+	core_ips_f = open("Traceroutes/" + asn + "_core_routers", 'r')
+	all_ips_f = open("Traceroutes/" + asn + "_IPs", 'r')
 	edge_freq_f = open("Traceroutes/" + asn + "_edge_freq", 'w')
 	core_freq_f = open("Traceroutes/" + asn + "_core_freq", 'w')
 	all_freq_f = open("Traceroutes/" + asn + "_all_freq", 'w')
 	comm_freq_f = open("Traceroutes/" + asn + "_comm_freq", 'w')
 
 	edge_ips = Set()
-	for line in edge_ips.readlines():
+	for line in edge_ips_f.readlines():
 		line = line.rstrip()
 		edge_ips.add(line)
 
 	core_ips = Set()
-	for line in core_ips.readlines():
+	for line in core_ips_f.readlines():
 		line = line.rstrip()
 		core_ips.add(line)
 
 	all_ips = Set()
-	for line in all_ips.readlines():
+	for line in all_ips_f.readlines():
 		line = line.rstrip()
 		all_ips.add(line)
 
@@ -316,7 +317,7 @@ def frequency(asn):
 	core_freq = list()
 	all_freq = list()
 
-	for line in traceroute_path.readlines():
+	for line in traceroute_path_f.readlines():
 		ips = line.split(" ")
 		for ip in ips:
 			ip = ip.rstrip()
@@ -332,26 +333,26 @@ def frequency(asn):
 	core_freq = Counter(core_freq)
 	all_freq = Counter(all_freq)
 
-	sorted_edge_ips = sorted(edge_ips_list.items(), key=operator.itemgetter(1), reverse=True)
-	sorted_core_ips = sorted(core_ips_list.items(), key=operator.itemgetter(1), reverse=True)
-	sorted_all_ips  = sorted(all_ips_list.items() , key=operator.itemgetter(1), reverse=True)
+	edge_freq = sorted(edge_freq.items(), key=operator.itemgetter(1), reverse=True)
+	core_freq = sorted(core_freq.items(), key=operator.itemgetter(1), reverse=True)
+	all_freq  = sorted(all_freq.items() , key=operator.itemgetter(1), reverse=True)
 
 	fsum = 0
-	for freq in sorted_edge_ips:
+	for freq in  edge_freq:
 		fsum += freq[1]
 		edge_freq_f.write(freq[0].rstrip() + "," + str(freq[1]) + "\n")
 
 	print "Edge: " + str(fsum)
 
 	fsum = 0
-	for freq in sorted_core_ips:
+	for freq in core_freq:
 		fsum += freq[1]
 		core_freq_f.write(freq[0].rstrip() + "," + str(freq[1]) + "\n")
 
 	print "Core: " + str(fsum)
 
 	fsum = 0
-	for freq in sorted_all_ips:
+	for freq in all_freq:
 		fsum += freq[1]
 		all_freq_f.write(freq[0].rstrip() + "," + str(freq[1]) + "\n")
 
@@ -361,3 +362,7 @@ def frequency(asn):
 	edge_freq_f.close()
 	core_freq_f.close()
 	all_freq_f.close()
+
+def comm_freq(asn):
+	##TODO
+	print "Calculating Commulative freq..."

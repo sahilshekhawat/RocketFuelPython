@@ -74,13 +74,14 @@ def analyse(asn):
 	print "NOTE: MAKE SURE YOU HAVE ALREADY RUN 'rocketfuel start' OR HAVE TRACEROUTE RESULTS in 'Traceroutes' directory."
 
 	# run.combine_traceroute_results(asn)
-	#find.traceroute_path(asn)
-	# find.unique_ips(asn)
-	# find.ip_to_as_mapping(asn)
-	# find.ip_in_given_as(asn)
-	# find.edge_routers(asn)
-	# find.core_routers(asn)
+	find.traceroute_path(asn)
+	find.unique_ips(asn)
+	find.ip_to_as_mapping(asn)
+	find.ip_in_given_as(asn)
+	find.edge_routers(asn)
+	find.core_routers(asn)
 	find.frequency(asn)
+	find.comm_freq(asn)
 
 @cli.command()
 @click.option('--ases', prompt='ASes file path', help="File containing list of ASes")
