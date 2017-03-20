@@ -26,8 +26,10 @@ import random
 import requests
 import subprocess
 import ipaddress as ip
-from bs4 import BeautifulSoup
+
 from sets import Set
+from bs4 import BeautifulSoup
+from collections import Counter
 
 from utils import create_file
 
@@ -284,3 +286,78 @@ def core_routers(asn):
 	all_ips.close()
 	edge_ips.close()
 	core_ips.close()
+
+def frequency(asn):
+	traceroute_path = open("Traceroutes/" + asn + "_path", 'r')
+	edge_ips = open("Traceroutes/" + asn + "_edge_routers", 'r')
+	core_ips = open("Traceroutes/" + asn + "_core_routers", 'r')
+	all_ips = open("Traceroutes/" + asn + "_IPs", 'r')
+	edge_freq_f = open("Traceroutes/" + asn + "_edge_freq", 'w')
+	core_freq_f = open("Traceroutes/" + asn + "_core_freq", 'w')
+	all_freq_f = open("Traceroutes/" + asn + "_all_freq", 'w')
+	comm_freq_f = open("Traceroutes/" + asn + "_comm_freq", 'w')
+
+	edge_ips = Set()
+	for line in edge_ips.readlines():
+		line = line.rstrip()
+		edge_ips.add(line)
+
+	core_ips = Set()
+	for line in core_ips.readlines():
+		line = line.rstrip()
+		core_ips.add(line)
+
+	all_ips = Set()
+	for line in all_ips.readlines():
+		line = line.rstrip()
+		all_ips.add(line)
+
+	edge_freq = list()
+	core_freq = list()
+	all_freq = list()
+
+	for line in traceroute_path.readlines():
+		ips = line.split(" ")
+		for ip in ips:
+			ip = ip.rstrip()
+			if ip in all_ips:
+				all_freq.append(ip)
+
+				if ip in edge_ips:
+					edge_freq.append(ip)
+				elif ip in core_ips:
+					core_freq.append(ip)
+
+	edge_freq = Counter(edge_freq)
+	core_freq = Counter(core_freq)
+	all_freq = Counter(all_freq)
+
+	sorted_edge_ips = sorted(edge_ips_list.items(), key=operator.itemgetter(1), reverse=True)
+	sorted_core_ips = sorted(core_ips_list.items(), key=operator.itemgetter(1), reverse=True)
+	sorted_all_ips  = sorted(all_ips_list.items() , key=operator.itemgetter(1), reverse=True)
+
+	fsum = 0
+	for freq in sorted_edge_ips:
+		fsum += freq[1]
+		edge_freq_f.write(freq[0].rstrip() + "," + str(freq[1]) + "\n")
+
+	print "Edge: " + str(fsum)
+
+	fsum = 0
+	for freq in sorted_core_ips:
+		fsum += freq[1]
+		core_freq_f.write(freq[0].rstrip() + "," + str(freq[1]) + "\n")
+
+	print "Core: " + str(fsum)
+
+	fsum = 0
+	for freq in sorted_all_ips:
+		fsum += freq[1]
+		all_freq_f.write(freq[0].rstrip() + "," + str(freq[1]) + "\n")
+
+
+	print "ALL: " + str(fsum)
+
+	edge_freq_f.close()
+	core_freq_f.close()
+	all_freq_f.close()

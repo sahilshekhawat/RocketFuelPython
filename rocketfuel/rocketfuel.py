@@ -80,7 +80,7 @@ def analyse(asn):
 	# find.ip_in_given_as(asn)
 	# find.edge_routers(asn)
 	# find.core_routers(asn)
-	
+	find.frequency(asn)
 
 @cli.command()
 @click.option('--ases', prompt='ASes file path', help="File containing list of ASes")
