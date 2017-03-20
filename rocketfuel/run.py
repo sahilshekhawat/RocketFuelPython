@@ -52,3 +52,16 @@ def planet_lab_auth(api_server, auth):
 	except:
 		sys.stdout.write( "Error!")
 		return False
+
+def combine_traceroute_results(asn):
+	print "[" + asn + "] Combining all Traceroute results"
+	traceroute_dir = "Traceroutes/" + asn
+	output_file = open("Traceroutes/" + asn + "_ALL", 'w')
+
+	for filename in os.listdir(traceroute_dir):
+		f = open(traceroute_dir + "/" + filename, 'r')
+		for line in f.readlines():
+			output_file.write(line)
+
+		output_file.write("\n")
+	output_file.close()

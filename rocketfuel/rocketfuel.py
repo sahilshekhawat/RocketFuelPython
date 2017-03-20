@@ -64,15 +64,17 @@ Type ``rocketfuel license`` to see this message.
 """
 
 @cli.command()
-@click.argument('AS')
-def analyse(as_number):
+@click.option('--asn', prompt='AS number to analyse', help="AS number to analyse")
+def analyse(asn):
 	"""Analyse traceroute output."""
 	# remove AS from the AS number if exists
-	asn = as_number
-	if asn[:2].upper() == "AS":
-		asn = asn[2:]
+	if asn[:2].upper() != "AS":
+		asn = "AS" + asn
 
-	print "NOTE: MAKE SURE YOU HAVE ALREADY RUN 'rocketfuel start' OR HAVE TRACEROUTE RESULTS."
+	print "NOTE: MAKE SURE YOU HAVE ALREADY RUN 'rocketfuel start' OR HAVE TRACEROUTE RESULTS in 'Traceroutes' directory."
+
+	# run.combine_traceroute_results(asn)
+	find.traceroute_path(asn)
 	
 
 @cli.command()
@@ -95,37 +97,37 @@ def start(ases, username, password, key, slicename):
 		print "No slice name passed"
 
 	# getting nodes
-	# auth = dict()
-	# auth['Username'] = username
-	# auth['AuthString'] = password
-	# auth['AuthMethod'] = "password"
+	auth = dict()
+	auth['Username'] = username
+	auth['AuthString'] = password
+	auth['AuthMethod'] = "password"
 
-	# try:
-	# 	api_server = ServerProxy('https://www.planet-lab.org/PLCAPI/')
-	# 	if run.planet_lab_auth(api_server, auth):
-	# 		node_list = find.user_slice(api_server, auth, slicename)
+	try:
+		api_server = ServerProxy('https://www.planet-lab.org/PLCAPI/')
+		if run.planet_lab_auth(api_server, auth):
+			node_list = find.user_slice(api_server, auth, slicename)
 
-	# 		if not os.path.exists(NODES_DIR):
-	# 			os.mkdir(NODES_DIR)
+			if not os.path.exists(NODES_DIR):
+				os.mkdir(NODES_DIR)
 
-	# 		# Separating nodes into 50 parts which will run concurrently
-	# 		node_index = 0
-	# 		node_limit = len(node_list)/MAX_PROCESSES
-	# 		for i in xrange(0, MAX_PROCESSES):
-	# 			fnodes = open(NODES_DIR + "/nodes_" + str(i), 'w')
-	# 			nodes_added = 0
-	# 			while nodes_added < node_limit:
-	# 				fnodes.write(node_list[node_index] + "\n")
-	# 				node_index += 1
-	# 				nodes_added += 1
-	# 			fnodes.close()
+			# Separating nodes into 50 parts which will run concurrently
+			node_index = 0
+			node_limit = len(node_list)/MAX_PROCESSES
+			for i in xrange(0, MAX_PROCESSES):
+				fnodes = open(NODES_DIR + "/nodes_" + str(i), 'w')
+				nodes_added = 0
+				while nodes_added < node_limit:
+					fnodes.write(node_list[node_index] + "\n")
+					node_index += 1
+					nodes_added += 1
+				fnodes.close()
 
-	# 	else:
-	# 		sys.exit()
-	# except KeyboardInterrupt:
-	# 	sys.exit()
-	# except:
-	# 	raise
+		else:
+			sys.exit()
+	except KeyboardInterrupt:
+		sys.exit()
+	except:
+		raise
 
 	"""start traceroutes to ASes from Planet Lab nodes."""
 	# remove AS from the AS number if exists
@@ -135,12 +137,12 @@ def start(ases, username, password, key, slicename):
 		line = line.rstrip()
 		asn = line
 
-		if asn[:2].upper() == "AS":
-			asn = asn[2:]
+		if asn[:2].upper() != "AS":
+			asn = "AS" + asn
 
 		#Get all advertised prefixes for the AS.
-		#find.prefix(asn)
+		find.prefix(asn)
 		#Randomly get some ips from each advertised prefixes.
-		#find.ip_from_prefix(asn)
+		find.ip_from_prefix(asn)
 		#Finally, run the traceroute
 		run.traceroute(asn, key, slicename)

@@ -28,9 +28,10 @@ def traceroute(asn, key, slicename, nodenum):
 		pass
 
 def _run(asn, key, user, nodes, ips):
+
 	for node in nodes:
 		try:
-			output = open("Traceroutes/" + asn + "#" + node, 'w')
+			output = open("Traceroutes/" + asn + "/" + asn + "#" + node, 'w')
 			client.connect(hostname=node, username=user, pkey = key)
 			for ip in ips:
 				stdin, stdout, stderr = client.exec_command("sudo traceroute " + ip + ";")

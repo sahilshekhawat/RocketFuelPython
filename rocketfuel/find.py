@@ -122,3 +122,44 @@ def user_slice(api_server, auth, slice_name):
         node_list = [x.get('hostname') for x in node_details]
         print "Found all Nodes :)"
         return node_list
+
+def traceroute_path(asn):
+	input_file = open("Traceroutes/" + asn + "_ALL", 'r')
+	output_file = open("Traceroutes/" + asn + "_path", 'w')
+	regex_pattern = re.compile("\((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\)")
+ 
+	line = input_file.readline()
+	while line != "":
+		# print line
+		# line = line.rstrip()
+		if "traceroute" in line:
+			path = ""
+			# print line
+			
+			line = input_file.readline()
+			original_line = line
+			line = line.rstrip()
+			while line != "" and not "traceroute" in line:
+				regex_match = re.search(regex_pattern, line)
+				# print regex_match
+				if regex_match:
+					ip_addr = regex_match.group(0)
+					# print ip_addr
+					ip_addr = str(ip_addr)[1:-1]
+					if path == "":
+						path = ip_addr
+					else:
+						path += " " + ip_addr
+
+				line = input_file.readline()
+				original_line = line
+				line = line.rstrip()
+
+			path += "\n"
+			output_file.write(path)
+			line = original_line
+
+		else:
+			line = input_file.readline()
+			# output_file.write(path)
+			# output_file.write("\n")
